@@ -37,8 +37,8 @@ main()
       if (RGFW_isMousePressed(p_window, RGFW_mouseLeft)) {
         std::vector<uint8_t> pixels;
         for (size_t j = 0; j < image_height; j++) {
-          std::clog << "\rScanlines remaining: " << (image_height - j) << ' '
-                    << std::flush;
+          std::print(std::clog, "\rScanlines remaining: {} ", image_height - j);
+          std::flush(std::clog);
           for (size_t i = 0; i < image_width; i++) {
             float r = i / float(image_width - 1);
             float g = j / float(image_height - 1);
