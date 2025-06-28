@@ -1,7 +1,5 @@
-#include <algorithm>
-#include <cstdint>
-#include <cstdlib>
-#include <vector>
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image_resize2.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -10,16 +8,24 @@
 #define RGFW_BUFFER
 #include "RGFW.h"
 
+#include <cstdint>
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+
 int
 main()
 {
-  uint16_t image_width = 512;
-  uint16_t image_height = 512;
+  uint16_t window_width = 512;
+  uint16_t window_height = 512;
+
+  uint16_t image_width = 256;
+  uint16_t image_height = 256;
   uint8_t image_channels = 4;
 
   RGFW_window* p_window =
     RGFW_createWindow("trace",
-                      RGFW_RECT(0, 0, image_width, image_height),
+                      RGFW_RECT(0, 0, window_width, window_height),
                       RGFW_windowCenter | RGFW_windowNoResize);
 
   while (RGFW_window_shouldClose(p_window) == RGFW_FALSE) {
@@ -31,6 +37,8 @@ main()
       if (RGFW_isMousePressed(p_window, RGFW_mouseLeft)) {
         std::vector<uint8_t> pixels;
         for (size_t j = 0; j < image_height; j++) {
+          std::clog << "\rScanlines remaining: " << (image_height - j) << ' '
+                    << std::flush;
           for (size_t i = 0; i < image_width; i++) {
             float r = i / float(image_width - 1);
             float g = j / float(image_height - 1);
@@ -42,7 +50,19 @@ main()
           }
         }
 
-        std::copy(pixels.begin(), pixels.end(), p_window->buffer);
+        stbir_resize(pixels.data(),
+                     image_width,
+                     image_height,
+                     image_width * image_channels,
+                     p_window->buffer,
+                     window_width,
+                     window_height,
+                     window_width * image_channels,
+                     STBIR_RGBA,
+                     STBIR_TYPE_UINT8,
+                     STBIR_EDGE_ZERO,
+                     STBIR_FILTER_POINT_SAMPLE);
+
         RGFW_window_swapBuffers(p_window);
 
         stbi_write_png("out/out.png",
