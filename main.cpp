@@ -40,12 +40,12 @@ main()
           std::print(std::clog, "\rScanlines remaining: {} ", image_height - j);
           std::flush(std::clog);
           for (size_t i = 0; i < image_width; i++) {
-            float r = i / float(image_width - 1);
-            float g = j / float(image_height - 1);
-            float b = 0.0f;
-            pixels.emplace_back(255.999f * r);
-            pixels.emplace_back(255.999f * g);
-            pixels.emplace_back(255.999f * b);
+            double r = i / double(image_width - 1);
+            double g = j / double(image_height - 1);
+            double b = 0.0;
+            pixels.emplace_back(255.999 * r);
+            pixels.emplace_back(255.999 * g);
+            pixels.emplace_back(255.999 * b);
             pixels.emplace_back(255);
           }
         }
