@@ -9,7 +9,7 @@ struct vec3
   float e[3];
 
   vec3()
-    : e{ 0.0f, 0.0f, 0.0f }
+    : e{ 0.0, 0.0, 0.0 }
   {
   }
   vec3(float e0, float e1, float e2)
@@ -41,7 +41,7 @@ struct vec3
     return *this;
   }
 
-  vec3& operator/=(float t) { return *this *= 1.0f / t; }
+  vec3& operator/=(float t) { return *this *= 1.0 / t; }
 
   float length() const { return std::sqrt(length_squared()); }
 
@@ -96,7 +96,7 @@ operator*(const vec3& v, float t)
 vec3
 operator/(const vec3& v, float t)
 {
-  return (1.0f / t) * v;
+  return (1.0 / t) * v;
 }
 
 float
